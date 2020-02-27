@@ -32,12 +32,12 @@ class PlantDetailViewModel(
     private val plantId: String
 ) : ViewModel() {
 
-    val isPlanted = gardenPlantingRepository.isPlanted(plantId)
-    val plant = plantRepository.getPlant(plantId)
+  val isPlanted = gardenPlantingRepository.isPlanted(plantId)
+  val plant = plantRepository.getPlant(plantId)
 
-    fun addPlantToGarden() {
-        viewModelScope.launch {
-            gardenPlantingRepository.createGardenPlanting(plantId)
-        }
+  fun addPlantToGarden() {
+    viewModelScope.launch {
+      gardenPlantingRepository.createGardenPlanting(plantId)
     }
+  }
 }

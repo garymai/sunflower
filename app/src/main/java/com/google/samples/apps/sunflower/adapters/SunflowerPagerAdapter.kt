@@ -26,17 +26,17 @@ const val PLANT_LIST_PAGE_INDEX = 1
 
 class SunflowerPagerAdapter(fragment: Fragment) : FragmentStateAdapter(fragment) {
 
-    /**
-     * Mapping of the ViewPager page indexes to their respective Fragments
-     */
-    private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
-        MY_GARDEN_PAGE_INDEX to { GardenFragment() },
-        PLANT_LIST_PAGE_INDEX to { PlantListFragment() }
-    )
+  /**
+   * Mapping of the ViewPager page indexes to their respective Fragments
+   */
+  private val tabFragmentsCreators: Map<Int, () -> Fragment> = mapOf(
+      MY_GARDEN_PAGE_INDEX to { GardenFragment() },
+      PLANT_LIST_PAGE_INDEX to { PlantListFragment() }
+  )
 
-    override fun getItemCount() = tabFragmentsCreators.size
+  override fun getItemCount() = tabFragmentsCreators.size
 
-    override fun createFragment(position: Int): Fragment {
-        return tabFragmentsCreators[position]?.invoke() ?: throw IndexOutOfBoundsException()
-    }
+  override fun createFragment(position: Int): Fragment {
+    return tabFragmentsCreators[position]?.invoke() ?: throw IndexOutOfBoundsException()
+  }
 }

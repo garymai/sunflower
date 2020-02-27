@@ -16,11 +16,7 @@
 
 package com.google.samples.apps.sunflower.viewmodels
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.google.samples.apps.sunflower.PlantListFragment
 import com.google.samples.apps.sunflower.data.Plant
 import com.google.samples.apps.sunflower.data.PlantRepository
@@ -33,30 +29,30 @@ class PlantListViewModel internal constructor(
     private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    val plants: LiveData<List<Plant>> = getSavedGrowZoneNumber().switchMap {
-        if (it == NO_GROW_ZONE) {
-            plantRepository.getPlants()
-        } else {
-            plantRepository.getPlantsWithGrowZoneNumber(it)
-        }
+  val plants: LiveData<List<Plant>> = getSavedGrowZoneNumber().switchMap {
+    if (it == NO_GROW_ZONE) {
+      plantRepository.getPlants()
+    } else {
+      plantRepository.getPlantsWithGrowZoneNumber(it)
     }
+  }
 
-    fun setGrowZoneNumber(num: Int) {
-        savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, num)
-    }
+  fun setGrowZoneNumber(num: Int) {
+    savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, num)
+  }
 
-    fun clearGrowZoneNumber() {
-        savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, NO_GROW_ZONE)
-    }
+  fun clearGrowZoneNumber() {
+    savedStateHandle.set(GROW_ZONE_SAVED_STATE_KEY, NO_GROW_ZONE)
+  }
 
-    fun isFiltered() = getSavedGrowZoneNumber().value != NO_GROW_ZONE
+  fun isFiltered() = getSavedGrowZoneNumber().value != NO_GROW_ZONE
 
-    private fun getSavedGrowZoneNumber(): MutableLiveData<Int> {
-        return savedStateHandle.getLiveData<Int>(GROW_ZONE_SAVED_STATE_KEY, NO_GROW_ZONE)
-    }
+  private fun getSavedGrowZoneNumber(): MutableLiveData<Int> {
+    return savedStateHandle.getLiveData<Int>(GROW_ZONE_SAVED_STATE_KEY, NO_GROW_ZONE)
+  }
 
-    companion object {
-        private const val NO_GROW_ZONE = -1
-        private const val GROW_ZONE_SAVED_STATE_KEY = "GROW_ZONE_SAVED_STATE_KEY"
-    }
+  companion object {
+    private const val NO_GROW_ZONE = -1
+    private const val GROW_ZONE_SAVED_STATE_KEY = "GROW_ZONE_SAVED_STATE_KEY"
+  }
 }

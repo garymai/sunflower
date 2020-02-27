@@ -24,9 +24,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.intent.Intents
 import androidx.test.espresso.intent.Intents.intended
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasAction
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra
-import androidx.test.espresso.intent.matcher.IntentMatchers.hasType
+import androidx.test.espresso.intent.matcher.IntentMatchers.*
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -43,44 +41,44 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class PlantDetailFragmentTest {
 
-    @Rule
-    @JvmField
-    val activityTestRule = ActivityTestRule(GardenActivity::class.java)
+  @Rule
+  @JvmField
+  val activityTestRule = ActivityTestRule(GardenActivity::class.java)
 
-    @Before
-    fun jumpToPlantDetailFragment() {
-        activityTestRule.activity.apply {
-            runOnUiThread {
-                val bundle = Bundle().apply { putString("plantId", testPlant.plantId) }
-                findNavController(R.id.nav_host).navigate(R.id.plant_detail_fragment, bundle)
-            }
-        }
+  @Before
+  fun jumpToPlantDetailFragment() {
+    activityTestRule.activity.apply {
+      runOnUiThread {
+        val bundle = Bundle().apply { putString("plantId", testPlant.plantId) }
+        findNavController(R.id.nav_host).navigate(R.id.plant_detail_fragment, bundle)
+      }
     }
+  }
 
-    @Ignore("Share button redesign pending")
-    @Test
-    fun testShareTextIntent() {
-        val shareText = activityTestRule.activity.getString(
-            R.string.share_text_plant,
-            testPlant.name
-        )
+  @Ignore("Share button redesign pending")
+  @Test
+  fun testShareTextIntent() {
+    val shareText = activityTestRule.activity.getString(
+        R.string.share_text_plant,
+        testPlant.name
+    )
 
-        Intents.init()
-        onView(withId(R.id.action_share)).perform(click())
-        intended(
-            chooser(
-                allOf(
-                    hasAction(Intent.ACTION_SEND),
-                    hasType("text/plain"),
-                    hasExtra(Intent.EXTRA_TEXT, shareText)
-                )
+    Intents.init()
+    onView(withId(R.id.action_share)).perform(click())
+    intended(
+        chooser(
+            allOf(
+                hasAction(Intent.ACTION_SEND),
+                hasType("text/plain"),
+                hasExtra(Intent.EXTRA_TEXT, shareText)
             )
         )
-        Intents.release()
+    )
+    Intents.release()
 
-        // dismiss the Share Dialog
-        InstrumentationRegistry.getInstrumentation()
-            .uiAutomation
-            .performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
-    }
+    // dismiss the Share Dialog
+    InstrumentationRegistry.getInstrumentation()
+        .uiAutomation
+        .performGlobalAction(AccessibilityService.GLOBAL_ACTION_BACK)
+  }
 }

@@ -27,16 +27,18 @@ import org.junit.Test
 
 class GardenActivityTest {
 
-    @Rule @JvmField
-    var activityTestRule = ActivityTestRule(GardenActivity::class.java)
+  @Rule
+  @JvmField
+  var activityTestRule = ActivityTestRule(GardenActivity::class.java)
 
-    @Test fun clickAddPlant_OpensPlantList() {
-        // Given that no Plants are added to the user's garden
+  @Test
+  fun clickAddPlant_OpensPlantList() {
+    // Given that no Plants are added to the user's garden
 
-        // When the "Add Plant" button is clicked
-        onView(withId(R.id.add_plant)).perform(click())
+    // When the "Add Plant" button is clicked
+    onView(withId(R.id.add_plant)).perform(click())
 
-        // Then the ViewPager should change to the Plant List page
-        onView(withId(R.id.plant_list)).check(matches(isDisplayed()))
-    }
+    // Then the ViewPager should change to the Plant List page
+    onView(withId(R.id.plant_list)).check(matches(isDisplayed()))
+  }
 }

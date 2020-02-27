@@ -32,50 +32,55 @@ import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PlantDaoTest {
-    private lateinit var database: AppDatabase
-    private lateinit var plantDao: PlantDao
-    private val plantA = Plant("1", "A", "", 1, 1, "")
-    private val plantB = Plant("2", "B", "", 1, 1, "")
-    private val plantC = Plant("3", "C", "", 2, 2, "")
+  private lateinit var database: AppDatabase
+  private lateinit var plantDao: PlantDao
+  private val plantA = Plant("1", "A", "", 1, 1, "")
+  private val plantB = Plant("2", "B", "", 1, 1, "")
+  private val plantC = Plant("3", "C", "", 2, 2, "")
 
-    @get:Rule
-    var instantTaskExecutorRule = InstantTaskExecutorRule()
+  @get:Rule
+  var instantTaskExecutorRule = InstantTaskExecutorRule()
 
-    @Before fun createDb() = runBlocking {
-        val context = InstrumentationRegistry.getInstrumentation().targetContext
-        database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
-        plantDao = database.plantDao()
+  @Before
+  fun createDb() = runBlocking {
+    val context = InstrumentationRegistry.getInstrumentation().targetContext
+    database = Room.inMemoryDatabaseBuilder(context, AppDatabase::class.java).build()
+    plantDao = database.plantDao()
 
-        // Insert plants in non-alphabetical order to test that results are sorted by name
-        plantDao.insertAll(listOf(plantB, plantC, plantA))
-    }
+    // Insert plants in non-alphabetical order to test that results are sorted by name
+    plantDao.insertAll(listOf(plantB, plantC, plantA))
+  }
 
-    @After fun closeDb() {
-        database.close()
-    }
+  @After
+  fun closeDb() {
+    database.close()
+  }
 
-    @Test fun testGetPlants() {
-        val plantList = getValue(plantDao.getPlants())
-        assertThat(plantList.size, equalTo(3))
+  @Test
+  fun testGetPlants() {
+    val plantList = getValue(plantDao.getPlants())
+    assertThat(plantList.size, equalTo(3))
 
-        // Ensure plant list is sorted by name
-        assertThat(plantList[0], equalTo(plantA))
-        assertThat(plantList[1], equalTo(plantB))
-        assertThat(plantList[2], equalTo(plantC))
-    }
+    // Ensure plant list is sorted by name
+    assertThat(plantList[0], equalTo(plantA))
+    assertThat(plantList[1], equalTo(plantB))
+    assertThat(plantList[2], equalTo(plantC))
+  }
 
-    @Test fun testGetPlantsWithGrowZoneNumber() {
-        val plantList = getValue(plantDao.getPlantsWithGrowZoneNumber(1))
-        assertThat(plantList.size, equalTo(2))
-        assertThat(getValue(plantDao.getPlantsWithGrowZoneNumber(2)).size, equalTo(1))
-        assertThat(getValue(plantDao.getPlantsWithGrowZoneNumber(3)).size, equalTo(0))
+  @Test
+  fun testGetPlantsWithGrowZoneNumber() {
+    val plantList = getValue(plantDao.getPlantsWithGrowZoneNumber(1))
+    assertThat(plantList.size, equalTo(2))
+    assertThat(getValue(plantDao.getPlantsWithGrowZoneNumber(2)).size, equalTo(1))
+    assertThat(getValue(plantDao.getPlantsWithGrowZoneNumber(3)).size, equalTo(0))
 
-        // Ensure plant list is sorted by name
-        assertThat(plantList[0], equalTo(plantA))
-        assertThat(plantList[1], equalTo(plantB))
-    }
+    // Ensure plant list is sorted by name
+    assertThat(plantList[0], equalTo(plantA))
+    assertThat(plantList[1], equalTo(plantB))
+  }
 
-    @Test fun testGetPlant() {
-        assertThat(getValue(plantDao.getPlant(plantA.plantId)), equalTo(plantA))
-    }
+  @Test
+  fun testGetPlant() {
+    assertThat(getValue(plantDao.getPlant(plantA.plantId)), equalTo(plantA))
+  }
 }

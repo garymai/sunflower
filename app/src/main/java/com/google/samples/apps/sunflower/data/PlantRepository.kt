@@ -21,21 +21,22 @@ package com.google.samples.apps.sunflower.data
  */
 class PlantRepository private constructor(private val plantDao: PlantDao) {
 
-    fun getPlants() = plantDao.getPlants()
+  fun getPlants() = plantDao.getPlants()
 
-    fun getPlant(plantId: String) = plantDao.getPlant(plantId)
+  fun getPlant(plantId: String) = plantDao.getPlant(plantId)
 
-    fun getPlantsWithGrowZoneNumber(growZoneNumber: Int) =
-            plantDao.getPlantsWithGrowZoneNumber(growZoneNumber)
+  fun getPlantsWithGrowZoneNumber(growZoneNumber: Int) =
+      plantDao.getPlantsWithGrowZoneNumber(growZoneNumber)
 
-    companion object {
+  companion object {
 
-        // For Singleton instantiation
-        @Volatile private var instance: PlantRepository? = null
+    // For Singleton instantiation
+    @Volatile
+    private var instance: PlantRepository? = null
 
-        fun getInstance(plantDao: PlantDao) =
-                instance ?: synchronized(this) {
-                    instance ?: PlantRepository(plantDao).also { instance = it }
-                }
-    }
+    fun getInstance(plantDao: PlantDao) =
+        instance ?: synchronized(this) {
+          instance ?: PlantRepository(plantDao).also { instance = it }
+        }
+  }
 }
